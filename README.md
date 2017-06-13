@@ -1,10 +1,8 @@
 # Discord Reddit Helper
----
 
 This is a [Discord](https://discordapp.com) bot for helping with common [Reddit](https://reddit.com) tasks. Well... perhaps not tasks, at least not yet.
 
 ## Current Functions
----
 This bot can currently only do two things, with one more on the way!
 
 It can convert "r/" style shortlinks put in Discord chat to full Reddit links.  
