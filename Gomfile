@@ -1,0 +1,3 @@
+gom 'github.com/bwmarrin/discordgo'
+gom 'github.com/turnage/graw'
+gom 'github.com/spf13/viper'
