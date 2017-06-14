@@ -27,26 +27,44 @@ func messageCreate(client *discordgo.Session, message *discordgo.MessageCreate) 
   // User/Sub quote generator.
   splitMessage := strings.Split(message.Content, " ")
   if splitMessage[0] == "#!usergen" {
-    client.ChannelMessageSend(message.ChannelID, userGenerate("/u/" + splitMessage[1]))
+    client.ChannelMessageSend(message.ChannelID, userGenerate(splitMessage[1]))
     return
   }
   if splitMessage[0] == "#!subgen" {
-    client.ChannelMessageSend(message.ChannelID, "Sorry, this is NYI.") //TODO: Diffrent logic is needed for sub quote generation
+    client.ChannelMessageSend(message.ChannelID, "I don't work, and Tidest can't get this working...\nSorry.\nIf you've got an idea as to how to fix this, check me out on github.\nhttps://github.com/mz2212/discord-reddit-helper") //TODO: Figure this one out.
     return
   }
 }
 
 func userGenerate(loc string) string {
-  harvest, err := redditbot.Listing(loc, "")
+  harvest, err := redditbot.Listing("/u/" + loc, "")
   if err != nil {
-    fmt.Println("[Reddit] Failed to get listing for ", loc, ": ", err)
-    msg := "Failed to get listing for " + loc + "\nEither that location doesn't exist, or I bugged out..."
+    fmt.Println("[Reddit] Failed to get listing for /u/", loc, ": ", err)
+    msg := "Failed to get listing for " + loc + "\nEither that user doesn't exist, or I bugged out..."
     return msg
   }
   gen := markov.New(2)
   for _, comment := range harvest.Comments[:30] {
     gen.Build(comment.Body)
   }
-  msg := gen.Generate(100) + " - " + loc
+  msg := gen.Generate(100) + " - /u/" + loc
   return msg
 }
+/*
+func subGenerate(loc string) string { // Sort of works...
+  harvest, err := redditbot.Listing("/r/" + loc, "")
+  if err != nil {
+    fmt.Println("[Reddit] Failed to get listing for /r/", loc, ": ", err)
+    msg := "Failed to get listing for " + loc + "\nEither that sub doesn't exist, or I bugged out..."
+    return msg
+  }
+  gen := markov.New(2)
+  for _, post := range harvest.Posts[:15] {
+    for _, reply := range post.Replies[:3] { // Seems to get unhappy right about here.
+      gen.Build(reply.Body)
+    }
+  }
+  msg := gen.Generate(100) + " - /r/" + loc
+  return msg
+}
+*/

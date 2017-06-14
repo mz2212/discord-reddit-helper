@@ -5,6 +5,7 @@ package markov
 import (
   "strings"
   "math/rand"
+  "time"
 )
 
 type Prefix []string
@@ -43,6 +44,7 @@ func (cha *Chain) Build(text string) {
 // The function that generates the sentence. Basically Magic.
 // But not really.
 func (cha *Chain) Generate(n int) string {
+  rand.Seed(time.Now().Unix())
   pre := make(Prefix, cha.prefixLen)
   var words []string
   for i := 0; i < n; i++ {
